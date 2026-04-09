@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cashback App</title>
+</head>
+<body>
+    <h2>Calculadora de Cashback</h2>
+    <label>Tipo de cliente:</label>
+    <select id="tipo">
+        <option value="comum">Comum</option>
+        <option value="vip">VIP</option>
+    </select><br><br>
+    <label>Valor da compra (R$):</label>
+    <input type="number" id="valor" step="0.01"><br><br>
+    <button onclick="calcular()">Calcular Cashback</button>
+    <h3>Resultado: R$ <span id="resultado">0.00</span></h3>
+
+    <h3>Histórico de consultas (seu IP)</h3>
+    <table border="1" id="historico">
+        <tr><th>Tipo</th><th>Valor</th><th>Cashback</th><th>Data</th></tr>
+    </table>
+
+    <script>
+        async function calcular() {
+            const tipo = document.getElementById('tipo').value;
+            const valor = parseFloat(document.getElementById('valor').value);
+            const response = await fetch('https://seudominio.com/calcular', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ tipo_cliente: tipo, valor_compra: valor })
+            });
+            const data = await response.json();
+            document.getElementById('resultado').innerText = data.cashback.toFixed(2);
+            carregarHistorico();
+        }
+
+        async function carregarHistorico() {
+            const response = await fetch('https://seudominio.com/historico');
+            const dados = await response.json();
+            const tabela = document.getElementById('historico');
+            tabela.innerHTML = '<tr><th>Tipo</th><th>Valor</th><th>Cashback</th><th>Data</th></tr>';
+            for (let item of dados) {
+                const row = tabela.insertRow();
+                row.insertCell(0).innerText = item.tipo_cliente;
+                row.insertCell(1).innerText = `R$ ${item.valor_compra}`;
+                row.insertCell(2).innerText = `R$ ${item.cashback}`;
+                row.insertCell(3).innerText = new Date(item.data).toLocaleString();
+            }
+        }
+        carregarHistorico();
+    </script>
+</body>
+</html>
