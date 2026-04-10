@@ -1,51 +1,27 @@
-import axios from 'axios'
+const API_BASE = 'http://localhost:5000'
 
-const api = axios.create({
-  baseURL: '/api',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
-
-export const calcularCashback = async (tipoCliente, valorCompra, desconto = 0) => {
-  try {
-    const response = await api.post('/calcular', {
-      tipo_cliente: tipoCliente,
-      valor_compra: valorCompra,
-      desconto: desconto,
-    })
-    return response.data
-  } catch (error) {
-    console.error('Erro na API:', error)
-    throw error
+export const calcularCashback = async (tipo_cliente, valor_compra, desconto = 0) => {
+  const response = await fetch(`${API_BASE}/calcular`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ tipo_cliente, valor_compra, desconto })
+  })
+  
+  if (!response.ok) {
+    throw new Error('Erro ao calcular')
   }
+  
+  return response.json()
 }
 
 export const getHistorico = async () => {
-  try {
-    const response = await api.get('/historico')
-    return response.data
-  } catch (error) {
-    console.error('Erro ao buscar histórico:', error)
-    return []
+  const response = await fetch(`${API_BASE}/historico`)
+  
+  if (!response.ok) {
+    throw new Error('Erro ao buscar histórico')
   }
-}
-
-export const getConfig = async () => {
-  try {
-    const response = await api.get('/config')
-    return response.data
-  } catch (error) {
-    console.error('Erro ao buscar config:', error)
-    return {}
-  }
-}
-
-export const healthCheck = async () => {
-  try {
-    const response = await api.get('/health')
-    return response.data
-  } catch (error) {
-    return { status: 'error', database: 'offline' }
-  }
+  
+  return response.json()
 }
