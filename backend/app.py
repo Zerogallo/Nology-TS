@@ -81,6 +81,20 @@ def calcular_cashback(valor_bruto, desconto_percent, is_vip):
     
     return round(cashback_final, 2)
 
+# Rota principal - página inicial
+@app.route('/')
+def index():
+    return jsonify({
+        'mensagem': 'Bem-vindo à API de Cashback!',
+        'status': 'online',
+        'endpoints_disponiveis': {
+            'calcular': '/calcular (POST) - Calcula o cashback',
+            'historico': '/historico (GET) - Consulta histórico de cálculos',
+            'health': '/health (GET) - Verifica saúde do servidor'
+        },
+        'instrucoes': 'Use o frontend HTML disponível ou acesse os endpoints via API'
+    }), 200
+
 # Rota para calcular o cashback
 @app.route('/calcular', methods=['POST'])
 def calcular():
