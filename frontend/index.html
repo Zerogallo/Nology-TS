@@ -1,74 +1,17 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./img/cupom.png" type="image/png">
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./test/img/cupom.png" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cashback App - Nology</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <img src="./img/cupom.png" alt="Logo Cashback" class="logo">
-            <h1>Calculadora de Cashback</h1>
-            <p>Programa de recompensas da Cashback</p>
-        </header>
-
-        <div class="calculator-card">
-            <h2>Consulta do Cashback</h2>
-            
-            <div class="form-group">
-                <label>Tipo de Cliente:</label>
-                <select id="tipoCliente">
-                    <option value="comum">Comum</option>
-                    <option value="vip">VIP</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Valor da Compra (R$):</label>
-                <input type="number" id="valorCompra" step="0.01" placeholder="Ex: 600.00">
-            </div>
-
-            <div class="form-group">
-                <label>Desconto (%):</label>
-                <input type="number" id="desconto" step="0.1" value="0" placeholder="Ex: 20">
-            </div>
-
-            <button id="calcularBtn" onclick="calcularCashback()">Calcular Cashback</button>
-
-            <div class="resultado" id="resultado" style="display: none;">
-                <h3>🎉 Cashback Calculado</h3>
-                <div class="cashback-value">R$ <span id="cashbackValor">0.00</span></div>
-                <div class="valor-final">Valor final com desconto: R$ <span id="valorFinal">0.00</span></div>
-            </div>
-        </div>
-
-        <div class="historico-card">
-            <h2>📋 Histórico de Consultas</h2>
-            <div class="table-responsive">
-                <table id="historicoTabela">
-                    <thead>
-                        <tr>
-                            <th>Tipo</th>
-                            <th>Valor</th>
-                            <th>Desconto</th>
-                            <th>Cashback</th>
-                            <th>Data/Hora</th>
-                            <th>IP</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historicoBody">
-                        <tr>
-                            <td colspan="6" style="text-align: center;">Carregando...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
+    <meta property="og:title" content="Cashback App - Nology" />
+    <meta property="og:description" content="Calculadora de cashback com histórico por IP" />
+    <meta property="og:image" content="/cashback-og.png" />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
