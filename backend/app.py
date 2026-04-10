@@ -126,7 +126,7 @@ def historico():
         
         cursor = conn.cursor(cursor_factory=RealDictCursor)
         cursor.execute(
-            "SELECT tipo_cliente, valor_compra, cashback, desconto, data FROM historico WHERE ip = %s ORDER BY data DESC LIMIT 50",
+            "SELECT ip, tipo_cliente, valor_compra, cashback, desconto, data FROM historico WHERE ip = %s ORDER BY data DESC LIMIT 50",
             (ip,)
         )
         rows = cursor.fetchall()

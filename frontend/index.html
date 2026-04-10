@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./img/cupom.png" type="image/png">
     <title>Cashback App - Nology</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>💰 Calculadora de Cashback</h1>
-            <p>Programa de recompensas da Nology</p>
+            <img src="./img/cupom.png" alt="Logo Cashback" class="logo">
+            <h1>Calculadora de Cashback</h1>
+            <p>Programa de recompensas da Cashback</p>
         </header>
 
         <div class="calculator-card">
-            <h2>Nova Consulta</h2>
+            <h2>Consulta do Cashback</h2>
             
             <div class="form-group">
                 <label>Tipo de Cliente:</label>
@@ -54,11 +56,12 @@
                             <th>Desconto</th>
                             <th>Cashback</th>
                             <th>Data/Hora</th>
+                            <th>IP</th>
                         </tr>
                     </thead>
                     <tbody id="historicoBody">
                         <tr>
-                            <td colspan="5" style="text-align: center;">Carregando...</td>
+                            <td colspan="6" style="text-align: center;">Carregando...</td>
                         </tr>
                     </tbody>
                 </table>
