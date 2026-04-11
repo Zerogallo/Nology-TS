@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000'
+const API_BASE = 'https://backend-02i4.onrender.com'
 
 // Função para calcular o cashback
 export const calcularCashback = async (tipo_cliente, valor_compra, desconto = 0) => {
