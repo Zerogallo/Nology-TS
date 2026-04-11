@@ -1,8 +1,8 @@
-const API_BASE = 'https://backend-02i4.onrender.com'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
 // Função para calcular o cashback
 export const calcularCashback = async (tipo_cliente, valor_compra, desconto = 0) => {
-  const response = await fetch(`${API_BASE}/calcular`, {
+  const response = await fetch(`${API_BASE_URL}/calcular`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ export const calcularCashback = async (tipo_cliente, valor_compra, desconto = 0)
 
 // Função para buscar o histórico de cálculos
 export const getHistorico = async () => {
-  const response = await fetch(`${API_BASE}/historico`)
+  const response = await fetch(`${API_BASE_URL}/historico`)
   
   if (!response.ok) {
     throw new Error('Erro ao buscar histórico')
