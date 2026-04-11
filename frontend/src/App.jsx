@@ -11,19 +11,22 @@ function App() {
   const [historico, setHistorico] = useState([])
   const [loading, setLoading] = useState(false)
 
+  // Função para carregar o histórico
+  const carregarHistorico = async () => {
+    try {
+      console.log('🔄 Carregando histórico...')
+      const data = await getHistorico()
+      setHistorico(data)
+      console.log('✅ Histórico carregado: ${data.length} consultas')
+    } catch (error) {
+      console.error('Erro ao carregar histórico:', error)
+    }
+  }
+
   // Carregar histórico ao iniciar
   useEffect(() => {
     carregarHistorico()
   }, [])
-
-  const carregarHistorico = async () => {
-    try {
-      const data = await getHistorico()
-      setHistorico(data)
-    } catch (error) {
-      console.error('Erro:', error)
-    }
-  }
 
   const handleCalcular = async (e) => {
     e.preventDefault()
@@ -39,13 +42,20 @@ function App() {
     setLoading(true)
     
     try {
+      console.log('📊 Calculando cashback...')
       const data = await calcularCashback(tipoCliente, valor, desc)
       setResultado(data)
-      await carregarHistorico() // Recarregar histórico
+      console.log('✅ Cashback calculado:', data.cashback)
       
-      // Limpar campos (opcional)
+      // 🔄 ATUALIZAR O HISTÓRICO AUTOMATICAMENTE
+      await carregarHistorico()
+      
+      // Opcional: limpar campos
       // setValorCompra('')
+      // setDesconto('0')
+      
     } catch (error) {
+      console.error('Erro ao calcular:', error)
       alert('Erro ao calcular: ' + error.message)
     } finally {
       setLoading(false)
@@ -129,15 +139,15 @@ function App() {
                   <th>Data</th>
                 </tr>
               </thead>
-              <tbody className="historico-body">
+              <tbody>
                 {historico.map((item, index) => (
-                  <tr key={index}>
+                  <tr key={index} className={index === 0 ? 'nova-consulta' : ''}>
                     <td className="ip-column">{item.ip || 'N/A'}</td>
-                    <td>{item.tipo_cliente.toUpperCase()}</td>
+                    <td className="tipo-column">{item.tipo_cliente.toUpperCase()}</td>
                     <td>R$ {parseFloat(item.valor_compra).toFixed(2)}</td>
                     <td>{item.desconto}%</td>
-                    <td>R$ {parseFloat(item.cashback).toFixed(2)}</td>
-                    <td>{item.data}</td>
+                    <td className="cashback-column">R$ {parseFloat(item.cashback).toFixed(2)}</td>
+                    <td className="data-column">{item.data}</td>
                   </tr>
                 ))}
               </tbody>
