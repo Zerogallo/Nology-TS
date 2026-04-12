@@ -1,3 +1,6 @@
+##  Cashback App - Desafio Nology
+
+Este projeto foi desenvolvido como solução para o **Desafio Nology – Estagiário de Dev 2026**. Trata-se de uma aplicação web completa que calcula cashback com base em regras de negócio específicas, armazena o histórico de consultas por IP e permite consultas em tempo real.
 
 Nology-TS/
 
