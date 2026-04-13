@@ -4,12 +4,14 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
 from dotenv import load_dotenv
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Carrega variáveis de ambiente do arquivo .env (apenas para desenvolvimento local)
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+CORS(app, resources={r"/api/": {"origins": "*"}})
 
 # Em desenvolvimento local (origem do Vite)
 origins = [
@@ -74,6 +76,17 @@ def init_db():
 # Inicializa o banco ao subir a aplicação (funciona com Gunicorn)
 init_db()
 
+# Inicializa o banco ao subir a aplicação (funciona com Flask direto)
+def get_real_ip():
+    """Retorna o IP real do cliente, respeitando cabeçalhos de proxy"""
+    # O Render (e outros PaaS) injeta o IP real no cabeçalho X-Forwarded-For
+    if request.headers.get('X-Forwarded-For'):
+        # Pega o primeiro IP da lista (o cliente original)
+        return request.headers.get('X-Forwarded-For').split(',')[0].strip()
+    # Fallback para ambiente local
+    return request.remote_addr
+
+# Função para calcular cashback com base nas regras fornecidas
 def calcular_cashback(valor_bruto, desconto_percent, is_vip):
     valor_final = valor_bruto * (1 - desconto_percent / 100)
     cashback_base = valor_final * 0.05
@@ -85,6 +98,7 @@ def calcular_cashback(valor_bruto, desconto_percent, is_vip):
         cashback_final = cashback_base
     return round(cashback_final, 2)
 
+# Rota de teste para verificar se a API está online
 @app.route('/')
 def index():
     return jsonify({
@@ -97,6 +111,7 @@ def index():
         }
     }), 200
 
+# Rota para calcular cashback e registrar histórico
 @app.route('/calcular', methods=['POST'])
 def calcular():
     try:
@@ -106,7 +121,8 @@ def calcular():
         desconto = float(data.get('desconto', 0))
         is_vip = (tipo.lower() == 'vip')
         cashback = calcular_cashback(valor, desconto, is_vip)
-        ip = request.remote_addr
+        ip =  get_real_ip()
+        
 
         conn = get_db_connection()
         if conn:
@@ -130,11 +146,12 @@ def calcular():
         })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 400
-
+    
+# Rota para obter histórico de cálculos do cliente (baseado no IP)
 @app.route('/historico', methods=['GET'])
 def historico():
     try:
-        ip = request.remote_addr
+        ip =  get_real_ip()
         conn = get_db_connection()
         if not conn:
             return jsonify([])
@@ -155,6 +172,7 @@ def historico():
         print(f"Erro no histórico: {e}")
         return jsonify([])
 
+# Rota de saúde para verificar status da API e do banco
 @app.route('/health', methods=['GET'])
 def health():
     conn = get_db_connection()
